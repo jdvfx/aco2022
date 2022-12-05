@@ -1,4 +1,3 @@
-#![allow(dead_code, unused_variables, unused_assignments, unused_imports)]
 use std::fs::{self, File};
 use std::io::{self, BufRead};
 use std::path::Path;
@@ -47,17 +46,14 @@ fn main() {
     for line in lines {
         let line = line.unwrap();
 
-        let opponent_char = &line[0..1]; // first char
-        let opponent_item = mapitems[opponent_char]; // rock,paper,scissors
-        let my_char = &line[2..3]; // second char
-        let my_item = mapitems[my_char]; // win,draw,lose
-        let gamescore = gameresult[my_item]; // score from wind/draw/lose
+        let opponent_item = mapitems[&line[0..1]]; // A,B,C > rock,paper,scissors
+        let my_item = mapitems[&line[2..3]]; // X,Y,Z > win,draw,lose
+        let gamescore = gameresult[my_item]; // win,draw,lose > 6,3,0
 
         let mymove = rps2(opponent_item, gamescore); // solve puzzle, what item ?
         let my_item_value = itemvalues[mymove]; // value of item
 
-        totalscore += gamescore;
-        totalscore += my_item_value;
+        totalscore += gamescore + my_item_value;
     }
     println!("{}", totalscore);
 }
