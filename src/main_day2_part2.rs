@@ -4,31 +4,39 @@ use std::path::Path;
 
 use std::collections::HashMap; // 0.7.2
 
+// for opponent piece (o) and result (r), return (user_item)
 fn rps2(o: &str, r: i32) -> &str {
-    let win_lose: Vec<(&str, &str)> = vec![
+    
+    // vector of tuples containing itemA>itemB (itemA wins)
+    let item_compare: Vec<(&str, &str)> = vec![
         ("rock", "scissors"),
         ("scissors", "paper"),
         ("paper", "rock"),
     ];
 
-    for i in &win_lose {
-        if r == 0 {
-            if i.0 == o {
-                // LOSE
-                return i.1;
-            }
-        } else if r == 6 {
+    for i in &item_compare {
+        match r {
+            // LOSE
+            0 => {
+                if i.0 == o {
+                    i.1;
+                }
+            },
             // WIN
-            if i.1 == o {
-                return i.0;
-            }
+            6 => {
+                if i.1 == o {
+                    i.0;
+                }
+            },
+            // DRAW
+            _ => o
         }
     }
-    o // DRAW
 }
 
 fn main() {
-    // to map letters to items, outcome, and scores
+
+    // map letters to items, outcome, and scores
     let mapitems = HashMap::from([
         ("A", "rock"),
         ("B", "paper"),
