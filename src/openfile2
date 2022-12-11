@@ -1,0 +1,13 @@
+use std::fs;
+
+fn main() {
+    let file = fs::read_to_string("./input_day3.txt").unwrap();
+    let lines: Vec<_> = file.split("\n").collect();
+    let elves_chunks = lines.windows(3);
+    for three_elves in elves_chunks {
+        println!("{:?}", three_elves);
+    }
+    // for i in lines.clone().take(3) {
+    //     println!("{:?}", i);
+    // }
+}
