@@ -6,8 +6,28 @@ use std::path::Path;
 
 use std::collections::HashMap; // 0.7.2
 
-fn main() {
+fn find_matching_char(string_a: &str, string_b: &str) -> Option<char> {
+    for i in string_a.chars() {
+        for j in string_b.chars() {
+            if i == j {
+                return Some(i);
+            }
+        }
+    }
+    None
+}
+
+fn letter_to_score(letter: char) -> i32 {
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (index, char_) in letters.chars().enumerate() {
+        if char_ == letter {
+            return (index + 1_usize) as i32;
+        }
+    }
+    0
+}
+
+fn main() {
     let mut total_score = 0;
 
     // to map letters to items, outcome, and scores
@@ -20,18 +40,9 @@ fn main() {
         let mid: usize = mid as usize;
         let two_compartments = line.split_at(mid);
 
-        'outer: for i in two_compartments.0.chars() {
-            for j in two_compartments.1.chars() {
-                if i == j {
-                    for (index, char_) in letters.chars().enumerate() {
-                        if char_ == i {
-                            total_score += (index + 1_usize) as i32;
-                            println!("{} {}", char_, index);
-                            break 'outer;
-                        }
-                    }
-                }
-            }
+        match find_matching_char(two_compartments.0, two_compartments.1) {
+            Some(c) => total_score += letter_to_score(c),
+            None => (),
         }
     }
     println!("{}", total_score);
