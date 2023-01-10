@@ -44,15 +44,15 @@ fn main() {
     let stream = fs::read_to_string("./input_day9.txt").unwrap();
 
     // === test DATA ===
-//     let stream = "R 4
-// U 4
-// L 3
-// D 1
-// R 4
-// D 1
-// L 5
-// R 2"
-//     .to_string();
+    //     let stream = "R 4
+    // U 4
+    // L 3
+    // D 1
+    // R 4
+    // D 1
+    // L 5
+    // R 2"
+    //     .to_string();
 
     let x = stream.trim().split("\n").collect::<Vec<_>>();
 
@@ -69,42 +69,20 @@ fn main() {
     for i in x {
         println!("== {} == ", i);
         let s = i.split_whitespace().collect::<Vec<_>>();
-        // println!("s:{:?}", s);
         let direction = s[0];
         let moves: i32 = s[1].to_string().parse::<i32>().unwrap();
 
         for mv in 0..moves {
-            match direction {
-                "D" => head_pos.y += 1,
-                "U" => head_pos.y -= 1,
-                "L" => head_pos.x -= 1,
-                "R" => head_pos.x += 1,
-                _ => (),
-            }
-
+            move_(&mut head_pos, &direction, 1);
+            //
             let diffx = (head_pos.x - tail_pos.x).abs();
             let diffy = (head_pos.y - tail_pos.y).abs();
 
-            let dif = diffx + diffy;
-
             if diffx == 2 && diffy == 0 || diffy == 2 && diffx == 0 {
-                match direction {
-                    "D" => tail_pos.y += 1,
-                    "U" => tail_pos.y -= 1,
-                    "L" => tail_pos.x -= 1,
-                    "R" => tail_pos.x += 1,
-                    _ => (),
-                }
+                move_(&mut tail_pos, &direction, 1);
             } else if diffx + diffy > 2 {
-                tail_pos.x = head_pos.x;
-                tail_pos.y = head_pos.y;
-                match direction {
-                    "D" => tail_pos.y -= 1,
-                    "U" => tail_pos.y += 1,
-                    "L" => tail_pos.x += 1,
-                    "R" => tail_pos.x -= 1,
-                    _ => (),
-                }
+                (tail_pos.x, tail_pos.y) = (head_pos.x, head_pos.y);
+                move_(&mut tail_pos, &direction, -1);
             }
 
             display_rope(&head_pos, &tail_pos);
@@ -115,4 +93,14 @@ fn main() {
         println!("{:?}", i);
     }
     println!("{}", tail_positions.len());
+}
+
+fn move_(pos: &mut Pos, direction: &str, sign: i32) {
+    match direction {
+        "D" => pos.y += sign,
+        "U" => pos.y -= sign,
+        "L" => pos.x -= sign,
+        "R" => pos.x += sign,
+        _ => (),
+    }
 }
